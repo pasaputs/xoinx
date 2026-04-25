@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xonix Video Reveal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Hidden video element used purely for frame extraction -->
+    <video id="source-video" crossorigin="anonymous" playsinline muted
+           style="display:none; position:absolute; pointer-events:none;"></video>
+
+    <!-- Floating settings toggle (visible on mobile only) -->
+    <button id="settings-toggle" aria-label="Open Settings">⚙️ Settings</button>
+    <!-- Backdrop for mobile drawer -->
+    <div id="settings-backdrop"></div>
+
+    <!-- Level Transition Overlay — shown between levels -->
+    <div id="level-overlay" class="hidden">
+        <div id="level-overlay-inner">
+            <div id="level-overlay-icon">🎬</div>
+            <h2 id="level-overlay-title">Level 2</h2>
+            <p id="level-overlay-desc">Get ready…</p>
+            <div class="level-progress-bar">
+                <div id="level-progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frame Extraction Loading Screen -->
+    <div id="extract-overlay" class="hidden">
+        <div id="extract-inner">
+            <div class="spinner"></div>
+            <p id="extract-msg">Extracting video frames…</p>
+        </div>
+    </div>
+
+    <div id="app-layout">
+        <div id="game-container">
+            <!-- The background frame that gets revealed -->
+            <div id="image-underlay"></div>
+
+            <!-- The game canvas -->
+            <canvas id="game-canvas" width="800" height="600"></canvas>
+
+            <!-- Reward video — hidden during game, shown as grand finale -->
+            <video id="reward-video" controls playsinline class="hidden"></video>
+
+            <!-- UI Overlay -->
+            <div id="ui-layer">
+                <div id="stats">
+                    <span id="level-badge">Level 1 / 3</span>
+                    <span id="revealed-text">Revealed: 0%</span>
+                </div>
+
+                <div id="overlay-screen" class="hidden">
+                    <h1 id="overlay-title">GAME OVER</h1>
+                    <p id="overlay-desc">An enemy touched your line.</p>
+                    <button id="restart-btn">Try Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Mode CTA — hidden in Creator Mode, revealed by JS -->
+        <a id="create-puzzle-btn" href="javascript:void(0)"
+           onclick="window.location.href = window.location.origin"
+           aria-label="Create your own puzzle">
+            🎨 Create your own puzzle!
+        </a>
+
+        <div id="settings-panel">
+            <div class="settings-header">
+                <h2>Game Settings</h2>
+                <button id="settings-close" aria-label="Close Settings">✕</button>
+            </div>
+
+            <div class="input-group">
+                <label for="setting-enemies">Enemy Count</label>
+                <input type="number" id="setting-enemies" value="3" min="1" max="20">
+            </div>
+
+            <div class="input-group">
+                <label for="setting-speed">Enemy Speed</label>
+                <input type="range" id="setting-speed" value="2.5" min="1" max="10" step="0.5">
+                <span id="speed-display">2.5</span>
+            </div>
+
+            <div class="input-group">
+                <label>Media Source</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="img-source" value="url" checked> URL</label>
+                    <label><input type="radio" name="img-source" value="upload"> Upload File</label>
+                </div>
+            </div>
+
+            <div class="input-group" id="url-input-group">
+                <input type="text" id="setting-img" placeholder="https://example.com/image.jpg or video.mp4">
+            </div>
+
+            <div class="input-group hidden" id="upload-input-group">
+                <input type="file" id="setting-upload" accept="image/*,video/mp4,video/webm,video/*">
+            </div>
+
+            <div class="input-group">
+                <label for="setting-obscuration">Obscuration (Blur)</label>
+                <input type="range" id="setting-obscuration" value="15" min="0" max="40" step="1">
+                <span id="obscuration-display">15px</span>
+            </div>
+
+            <button id="start-btn">Start / Load Game</button>
+
+            <div class="divider"></div>
+
+            <button id="share-btn">Generate Share Link</button>
+            <input type="text" id="share-url" readonly placeholder="Share URL will appear here...">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

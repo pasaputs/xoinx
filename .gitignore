@@ -1,0 +1,14 @@
+# Xonix — version control ignore rules
+
+# Environment / secrets
+.env
+
+# Node modules
+node_modules/
+
+# npm debug
+npm-debug.log*
+
+# OS artefacts
+.DS_Store
+Thumbs.db
