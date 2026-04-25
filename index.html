@@ -38,37 +38,34 @@
     </div>
 
     <div id="app-layout">
-        <div id="game-container">
-            <!-- The background frame that gets revealed -->
-            <div id="image-underlay"></div>
-
-            <!-- The game canvas -->
-            <canvas id="game-canvas" width="800" height="600"></canvas>
-
-            <!-- Reward video — hidden during game, shown as grand finale -->
-            <video id="reward-video" controls playsinline class="hidden"></video>
-
-            <!-- UI Overlay -->
-            <div id="ui-layer">
-                <div id="stats">
-                    <span id="level-badge">Level 1 / 3</span>
-                    <span id="revealed-text">Revealed: 0%</span>
-                </div>
-
-                <div id="overlay-screen" class="hidden">
-                    <h1 id="overlay-title">GAME OVER</h1>
-                    <p id="overlay-desc">An enemy touched your line.</p>
-                    <button id="restart-btn">Try Again</button>
-                </div>
+        <div id="game-column">
+            <!-- UI Header: Status Badge -->
+            <div id="stats">
+                <span id="level-badge">Level 1 / 3</span>
+                <span id="revealed-text">Revealed: 0%</span>
             </div>
-        </div>
 
-        <!-- Player Mode CTA — hidden in Creator Mode, revealed by JS -->
-        <a id="create-puzzle-btn" href="javascript:void(0)"
-           onclick="window.location.href = window.location.origin"
-           aria-label="Create your own puzzle">
-            🎨 Create your own puzzle!
-        </a>
+            <!-- Main Interactive Canvas Area -->
+            <div id="game-container">
+                <div id="image-underlay"></div>
+                <canvas id="game-canvas" width="800" height="600"></canvas>
+                <video id="reward-video" controls playsinline class="hidden"></video>
+            </div>
+
+            <!-- Below-Canvas Popups / UI -->
+            <div id="overlay-screen" class="hidden">
+                <h1 id="overlay-title">GAME OVER</h1>
+                <p id="overlay-desc">An enemy touched your line.</p>
+                <button id="restart-btn">Try Again</button>
+            </div>
+
+            <!-- Player Mode CTA — hidden in Creator Mode, revealed by JS -->
+            <a id="create-puzzle-btn" href="javascript:void(0)"
+               onclick="window.location.href = window.location.origin"
+               aria-label="Create your own puzzle">
+                🎨 Create your own puzzle!
+            </a>
+        </div>
 
         <div id="settings-panel">
             <div class="settings-header">
