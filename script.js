@@ -396,11 +396,11 @@ function completeCut() {
 //  Rendering
 // =============================================================================
 function _buildMaskFromImage(img) {
+    // Start fresh
     maskCtx.clearRect(0, 0, WIDTH, HEIGHT);
-    maskCtx.fillStyle = 'rgba(10, 10, 10, 0.95)';
-    maskCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    maskCtx.filter = `blur(40px) brightness(10%) grayscale(80%)`;
+    // Option: lighter filter so it doesn't crash iOS hardware acceleration
+    maskCtx.filter = 'blur(10px) grayscale(50%)';
 
     const imgRatio    = img.width / img.height;
     const canvasRatio = WIDTH / HEIGHT;
@@ -413,8 +413,16 @@ function _buildMaskFromImage(img) {
         drawX = 0; drawY = (HEIGHT - drawH) / 2;
     }
     const margin = CURRENT_OBSCURATION;
+    
+    // 1. Draw the base image (it might silently fail on mobile, which is why we need step 3)
     maskCtx.drawImage(img, drawX - margin, drawY - margin, drawW + margin * 2, drawH + margin * 2);
+
+    // 2. Temporarily disable filters
     maskCtx.filter = 'none';
+
+    // 3. Draw a very dark, nearly opaque rectangle over the entire mask to guarantee it's hidden
+    maskCtx.fillStyle = 'rgba(10, 10, 10, 0.96)';
+    maskCtx.fillRect(0, 0, WIDTH, HEIGHT);
 }
 
 function drawRevealedCells() {
@@ -614,6 +622,10 @@ function startGameCore() {
     levelBadge.textContent = totalLevels > 1
         ? `Level ${currentLevel} / ${totalLevels}`
         : 'Image Reveal';
+
+    // Explicitly draw the initial MASKED state to the screen BEFORE the game loop starts
+    // This prevents the underlying frame from being visible during initialization delays on mobile
+    drawRevealedCells();
 
     lastTime   = performance.now();
     if (gameLoopId) cancelAnimationFrame(gameLoopId);
